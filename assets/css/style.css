@@ -1,0 +1,16 @@
+.gifs{
+	width: 100%;
+}
+
+#sidebar-wrapper{
+	height:100%;
+}
+
+.btn {
+	margin: 4px;
+}
+
+.brand {
+	transform: rotate(30deg);
+	height: 150px;
+}
