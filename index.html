@@ -18,7 +18,7 @@
 <body>
   <div class="container">
     <!-- #sidebar-wrapper -->
-    <div id="sidebar-wrapper" class="col-sm-3 text-left">
+    <div id="sidebar-wrapper" class="col-sm-3 text-right">
       <img class="brand" src="assets/images/thumbsup.png" alt="Thumbs Up">
       <div class="navbar">
         <form id="reaction-form">
@@ -29,21 +29,28 @@
           <input id="add-reaction" class="btn btn-primary" type="submit" value="Add a Reaction">
         </form>
         <br>
-        <div id="btnList" class="">
+        <button type="button" id="loadBtn" class="btn btn-success hidden">Load List</button>
+        <button type="button" id="saveBtn" class="btn btn-default">Save List</button>
+        
+        <div id="btnList" class="text-right">
         </div>
-        <div id="saveBtn" class="btn btn-danger">Save List</div>
-        <div id="loadBtn" class="btn btn-danger">Load List</div>
       </div>
     </div>
     <!-- /#sidebar-wrapper -->
     <div class="content-wrapper col-sm-9">
       <div class="jumbotron text-center">
         <h2>Check out these sweet reaction Gifs!!</h2>
+        <p>Click on the Buttons on the sidebar to load 10 gifs! <br> You can also customize your list by adding and saving as you see fit!</p>
       </div>
       <div class="text-center">
         <div id="imageDisplay"></div>
       </div>
     </div>
+  </div>
+  <div class="push"></div>
+  <div class="footer navbar navbar-default navbar-fixed-bottom align-middle text-default text-center text-muted">
+    <p>&copy; Copyright 2017 Dan Gabel</p>
+    <p>Gifs Provided by <a href="https://giphy.com/" target="_blank">Giphy!</a></p>
   </div>
 </body>
 

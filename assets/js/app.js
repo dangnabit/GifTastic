@@ -10,12 +10,18 @@ $(document).ready(function() {
 
     var reactionButtons = ['Shock', 'Awe', 'Angry', 'Happy', 'Surprise', 'Scared', 'Excited', 'Bored'];
 
-    var reactionClick = function(reaction) {
-        var reactionLbl = $(this).attr("data-reaction");
-        var offsetRand = 10 * Math.floor(Math.random() * 100);
+    var renderGifs = function(reaction) {
 
-        $('.reactBtn').each(function(){
-          $(this).removeClass('btn-info');
+        if (typeof reaction !== 'string') {
+            var reactionLbl = $(this).attr("data-reaction");
+        } else {
+            reactionLbl = reaction;
+        }
+
+        var offsetRand = 10 * Math.floor(Math.random() * 50);
+
+        $('.reactBtn').each(function() {
+            $(this).removeClass('btn-info');
         });
 
         $(this).toggleClass('btn-info');
@@ -31,8 +37,12 @@ $(document).ready(function() {
             .done(function(response) {
                 var results = response.data;
 
+                if (results.length < 1) {
+                    return renderGifs();
+                }
+
                 $imageDisplay.empty();
-                console.log(results[1])
+
                 for (var i = 0; i < results.length; i++) {
                     var gifDiv = $('<div>');
 
@@ -42,14 +52,15 @@ $(document).ready(function() {
 
                     var reactionImage = $('<img>');
 
-                    reactionImage.attr('src', results[i].images.original_still.url);
+                    reactionImage.attr('src', results[i].images.fixed_height_still.url);
                     reactionImage.addClass('gifs');
-                    reactionImage.attr('data-still', results[i].images.original_still.url);
-                    reactionImage.attr('data-animate', results[i].images.original.url);
+                    reactionImage.attr('data-still', results[i].images.fixed_height_still.url);
+                    reactionImage.attr('data-animate', results[i].images.fixed_height.url);
                     reactionImage.attr('data-state', 'still');
                     reactionImage.attr('alt', reactionLbl + " Gif");
-                    gifDiv.prepend(p);
+
                     gifDiv.append(reactionImage);
+                    gifDiv.append(p);
 
                     gifDiv.addClass('col-sm-6');
 
@@ -79,10 +90,18 @@ $(document).ready(function() {
             reactionButtons.splice(index, 1);
         }
 
-        console.log(reactionButtons);
-
         $(this).parent().remove();
+    }
 
+    var addBtn = function() {
+
+        var reaction = $reactionInput.val().trim();
+        
+        if (reaction !== "") {
+            reactionButtons.unshift(reaction);
+        }
+        $reactionInput.val('');
+        renderButtons();
     }
 
     var renderButtons = function() {
@@ -92,38 +111,53 @@ $(document).ready(function() {
             var btn = $("<button>");
             var x = $('<button>');
             x.text('x');
-            x.addClass('btn btn-outline-danger xBtn');
+            x.addClass('btn btn-warning xBtn');
             x.attr("data-reaction", reactionButtons[i]);
-            btn.addClass("btn btn-lg btn-primary reactBtn");
+            btn.addClass("btn btn-primary reactBtn");
             btn.attr("data-reaction", reactionButtons[i]);
             btn.text(reactionButtons[i]);
-            div.append(x);
+
             div.append(btn);
+            div.append(x);
             $btnList.append(div);
 
         }
     }
 
+    var saveButtonArray = function() {
+        var buttonStr = JSON.stringify(reactionButtons);
+        localStorage.setItem('gifButtons', buttonStr);
+        $loadBtn.removeClass('hidden');
+    }
+
+    var loadButtonArray = function() {
+        reactionButtons = JSON.parse(localStorage.getItem('gifButtons'));
+        renderButtons();
+    }
+
+
+
+    if (localStorage.getItem('gifButtons')) {
+        $loadBtn.removeClass('hidden');
+    }
+
+    $loadBtn.on('click', loadButtonArray)
+
+    $saveBtn.on('click', saveButtonArray)
+
     $(document).on("click", ".xBtn", removeBtn);
 
-    $(document).on("click", ".reactBtn", reactionClick);
+    $(document).on("click", ".reactBtn", renderGifs);
 
     $(document).on("click", ".gifs", gifClick);
 
     $addReaction.on("click", function(event) {
-        event.preventDefault();
-
-        var reaction = $reactionInput.val().trim();
-        console.log(reaction);
-        if (reaction !== "") {
-            reactionButtons.push(reaction);
-        }
-        console.log(reactionButtons);
-        $reactionInput.val('');
-        renderButtons();
+      event.preventDefault();
+      addBtn();
     });
 
 
 
     renderButtons();
+    renderGifs('Fun');
 });
