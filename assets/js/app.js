@@ -26,7 +26,7 @@ $(document).ready(function() {
 
         $(this).toggleClass('btn-info');
 
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + reactionLbl + "&api_key=dc6zaTOxFJmzC&limit=10&offset=" + offsetRand;
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + reactionLbl + "&api_key=dc6zaTOxFJmzC&limit=10&offset=" + offsetRand;
 
         console.log(queryURL);
 
@@ -159,5 +159,5 @@ $(document).ready(function() {
 
 
     renderButtons();
-    renderGifs('Fun');
+    renderGifs('Laughing');
 });
